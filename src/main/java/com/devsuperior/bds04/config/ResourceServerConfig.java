@@ -24,9 +24,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     private static final String[] PUBLIC = { "/oauth/token", "/h2-console/**" };
 
-    private static final String[] CITIES = {"/cities"};
+    private static final String[] PUBLIC_GET = {"/cities/**", "/events/**"};
 
-    private static final String[] OPERATOR_GET = { "/departments/**", "/employees/**" };
+    private static final String[] CITIES_POST = {"/cities/**"};
+
+    private static final String[] EVENTS_POST = {"/events/**"};
+
+    //private static final String[] OPERATOR_GET = { "/departments/**", "/employees/**" };
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
@@ -43,7 +47,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers(PUBLIC).permitAll()
-                .antMatchers(HttpMethod.GET, CITIES).permitAll()
-                .antMatchers(HttpMethod.POST, CITIES).hasAnyRole("ADMIN");
+                .antMatchers(HttpMethod.GET, PUBLIC_GET).permitAll()
+                .antMatchers(HttpMethod.POST, CITIES_POST).hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.POST, EVENTS_POST).hasAnyRole("ADMIN", "CLIENT");
     }
 }
